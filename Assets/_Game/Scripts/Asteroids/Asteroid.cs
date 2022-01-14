@@ -34,6 +34,12 @@ namespace Asteroids
             AddForce();
             AddTorque();
             SetSize();
+            AsteroidDestroyer.RegisterAsteroid(this);
+        }
+
+        public float GetSize()
+        {
+            return _shape.localScale.x;
         }
         
         private void OnTriggerEnter2D(Collider2D other)
@@ -47,6 +53,7 @@ namespace Asteroids
         private void HitByLaser()
         {
             _onAsteroidDestroyed.Raise(_instanceId);
+            AsteroidDestroyer.OnAsteroidHitByLaser(_instanceId);
             Destroy(gameObject);
         }
 
@@ -96,7 +103,7 @@ namespace Asteroids
             _rigidbody.AddTorque(torque, ForceMode2D.Impulse);
         }
 
-        private void SetSize()
+        public void SetSize()
         {
             var size = Random.Range(_minSize, _maxSize);
             _shape.localScale = new Vector3(size, size, 0f);

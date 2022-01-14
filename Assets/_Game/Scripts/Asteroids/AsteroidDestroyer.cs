@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Asteroids
@@ -13,19 +14,19 @@ namespace Asteroids
             Clear();
         }
 
-        public void Add()
+        public void Add(int id, Asteroid asteroid)
         {
-            
+            _asteroids.Add(id, asteroid);
         }
 
-        public void Remove()
+        public void Remove(int id)
         {
-            
+            _asteroids.Remove(id);
         }
 
         public Asteroid Get(int id)
         {
-            return null;
+            return _asteroids[id];
         }
 
         private void Clear()
@@ -34,29 +35,31 @@ namespace Asteroids
         }
     }
     
-    public class AsteroidDestroyer : MonoBehaviour
+    public static class AsteroidDestroyer
     {
-        [SerializeField] private AsteroidSet _asteroids;
+        private static AsteroidSet _asteroids = new AsteroidSet();
 
-        public void OnAsteroidHitByLaser(int asteroidId)
+        public static void OnAsteroidHitByLaser(int asteroidId)
         {
             // Get the asteroid
-            
+            Asteroid asteroid = _asteroids.Get(asteroidId);
+
             // Check if big or small
-            
-            // if small enough, we Destoy
-            
-            // if it's big, we split it up.
+            if (asteroid.GetSize() > 0.5)
+            {
+                
+            }
+            DestroyAsteroid(asteroid);
         }
 
-        public void RegisterAsteroid(Asteroid asteroid)
+        public static void RegisterAsteroid(Asteroid asteroid)
         {
-            
+            _asteroids.Add(asteroid.GetInstanceID(), asteroid);
         }
 
-        private void DestroyAsteroid(Asteroid asteroid)
+        private static void DestroyAsteroid(Asteroid asteroid)
         {
-            //_asteroids.Remove()
+            _asteroids.Remove(asteroid.GetInstanceID());
         }
     }
 }
